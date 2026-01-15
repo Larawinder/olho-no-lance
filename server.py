@@ -63,9 +63,9 @@ def consultar_pagamento(payment_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-iif __name__ == '__main__':
+if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 3000))
     print(f'🚀 Servidor rodando na porta {port}')
     print('💳 Mercado Pago em modo PRODUÇÃO')
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)S
