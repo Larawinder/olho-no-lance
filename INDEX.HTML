@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olho no Lance - Sistema de Solicitação de Vídeos</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- TELA DE LOGIN -->
+    <div id="loginScreen" class="screen active">
+        <div class="background-effects">
+            <div class="gradient-overlay"></div>
+        </div>
+        
+        <div class="login-container">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <img src="images/logo.png" alt="Olho no Lance" class="logo" id="logoImage">
+                <!-- Fallback se não tiver logo -->
+                
+            </div>
+
+            <div class="title-section">
+                <h1 class="main-title">OLHO NO LANCE</h1>
+                <p class="subtitle">NÃO PERCA NENHUM LANCE DO JOGO</p>
+                <p class="tagline">SISTEMA MAIS COMPLETO</p>
+            </div>
+
+            <button class="btn-primary" onclick="goToMarketplace()">
+                SOLICITAR LANCE
+            </button>
+
+            <div class="social-info">
+                <p class="info-text">Sistema completo nas melhores quadras</p>
+                <p class="social-handle">@olhonolancetm</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA MARKETPLACE -->
+    <div id="marketplaceScreen" class="screen">
+        <div class="marketplace-container">
+            <div class="marketplace-header">
+                <h1 class="page-title">Escolha seu Lance</h1>
+                <p class="page-subtitle">Selecione o tipo de vídeo</p>
+            </div>
+
+            <div id="lancesGrid" class="lances-grid">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+
+            <div class="marketplace-footer">
+                <button class="btn-secondary" onclick="goToLogin()">
+                    ← Voltar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SELEÇÃO DE QUADRA -->
+    <div id="quadraModal" class="modal">
+        <div class="modal-overlay" onclick="closeQuadraModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Selecione a Quadra</h2>
+                <button class="btn-close" onclick="closeQuadraModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="map-pin"></i>
+                        Quadra
+                    </label>
+                    <select id="selectQuadra" class="form-select">
+                        <option value="">Selecione...</option>
+                        <!-- Opções inseridas via JS -->
+                    </select>
+                </div>
+
+                <div id="ladoQuadraGroup" class="form-group hidden">
+                    <label class="form-label">Lado da quadra</label>
+                    <div class="lado-buttons">
+                        <button class="btn-lado" data-lado="cima" onclick="selectLado('cima')">
+                            🔼 Cima
+                        </button>
+                        <button class="btn-lado" data-lado="baixo" onclick="selectLado('baixo')">
+                            🔽 Baixo
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-full" onclick="submitQuadra()">
+                    Continuar →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DESCRIÇÃO DO LANCE -->
+    <div id="descricaoModal" class="modal">
+        <div class="modal-overlay" onclick="closeDescricaoModal()"></div>
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 class="modal-title">Descreva seu Lance</h2>
+                <button class="btn-close" onclick="closeDescricaoModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="alert-info">
+                    <i data-lucide="file-text"></i>
+                    <p>Quanto mais detalhes, mais fácil localizar seu lance!</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="calendar"></i>
+                            Data do Jogo
+                        </label>
+                        <input type="date" id="dataJogo" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="clock"></i>
+                            Horário
+                        </label>
+                        <input type="time" id="horarioJogo" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="file-text"></i>
+                        Descrição Detalhada
+                    </label>
+                    <textarea 
+                        id="descricaoLance" 
+                        class="form-textarea" 
+                        rows="4" 
+                        placeholder="Ex: Gol de falta do camisa 10, jogador alto de cabelo preto, aos 25min do 2º tempo..."
+                    ></textarea>
+                </div>
+
+                <div class="form-divider">
+                    <span>SEUS DADOS</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="user"></i>
+                        Nome Completo
+                    </label>
+                    <input type="text" id="nomeCliente" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="mail"></i>
+                        Email
+                    </label>
+                    <input type="email" id="emailCliente" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="phone"></i>
+                        Telefone/WhatsApp
+                    </label>
+                    <input type="tel" id="telefoneCliente" class="form-input" placeholder="(00) 00000-0000">
+                </div>
+
+                <button class="btn-primary btn-full" onclick="submitDescricao()">
+                    Ir para Pagamento →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA DE PAGAMENTO -->
+    <div id="paymentScreen" class="screen">
+        <div class="payment-container">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h2 class="payment-title">Pagamento PIX</h2>
+                    <div class="payment-info">
+                        <p id="paymentLanceName" class="lance-name"></p>
+                    </div>
+                    <div id="paymentValue" class="payment-value"></div>
+                </div>
+
+                <div class="qr-code-container">
+                    <div class="qr-code-wrapper">
+                        <img id="qrCodeImage" src="" alt="QR Code PIX" class="qr-code-image">
+                        <div class="qr-code-placeholder">
+                            <div class="qr-icon">📱</div>
+                            <p class="qr-text">QR Code PIX</p>
+                            <p id="qrValue" class="qr-value"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pix-code-section">
+                    <label class="pix-label">Código PIX:</label>
+                    <div class="pix-code-box">
+                        <p id="pixCode" class="pix-code"></p>
+                    </div>
+                    <button id="btnCopyPix" class="btn-copy" onclick="copyPixCode()">
+                        <i data-lucide="copy"></i>
+                        Copiar Código
+                    </button>
+                </div>
+
+                <div class="prazo-info">
+                    <p class="prazo-title">⏱️ Prazo de Entrega</p>
+                    <p id="prazoText" class="prazo-text"></p>
+                    <p class="prazo-note">(Segunda a sexta-feira)</p>
+                </div>
+
+                <div class="order-summary">
+                    <p class="summary-item">
+                        <span class="summary-label">Quadra:</span>
+                        <span id="summaryQuadra"></span>
+                    </p>
+                    <p class="summary-item">
+                        <span class="summary-label">Data:</span>
+                        <span id="summaryData"></span>
+                    </p>
+                    <p class="summary-item">
+                        <span class="summary-label">Cliente:</span>
+                        <span id="summaryNome"></span>
+                    </p>
+                </div>
+
+                <button class="btn-secondary btn-full" onclick="novopedido()">
+                    Fazer Outro Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>Processando...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/mercadopago.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Inicializa ícones Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>
