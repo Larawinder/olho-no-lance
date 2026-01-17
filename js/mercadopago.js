@@ -1,7 +1,6 @@
 /* ============================================
    INTEGRAÇÃO MERCADO PAGO - VIA BACKEND
    ============================================ */
-
 const MercadoPago = {
     
     async criarPagamentoPix(pedido) {
@@ -23,20 +22,17 @@ const MercadoPago = {
                 telefone: pedido.telefone
             }
         };
-
         try {
             console.log('🚀 Criando pagamento PIX via backend...');
             
-const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consultar-pagamento/${paymentId}`);               
+            const response = await fetch('https://olho-no-lance-api.onrender.com/api/criar-pagamento', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(paymentData)
             });
-
             const data = await response.json();
-
             if (response.ok && data.status === 'pending') {
                 console.log('✅ Pagamento PIX criado com sucesso!');
                 console.log('🆔 Payment ID:', data.id);
@@ -63,7 +59,6 @@ const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consult
                     error: errorMessage
                 };
             }
-
         } catch (error) {
             console.error('❌ Erro na requisição:', error);
             return {
@@ -72,12 +67,11 @@ const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consult
             };
         }
     },
-
+    
     async consultarPagamento(paymentId) {
         try {
-            const response = await fetch(`http://localhost:3000/api/consultar-pagamento/${paymentId}`);
+            const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consultar-pagamento/${paymentId}`);
             const data = await response.json();
-
             if (response.ok) {
                 return {
                     status: data.status,
@@ -89,7 +83,6 @@ const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consult
                 console.error('❌ Erro ao consultar pagamento:', data);
                 return null;
             }
-
         } catch (error) {
             console.error('❌ Erro ao consultar pagamento:', error);
             return null;
