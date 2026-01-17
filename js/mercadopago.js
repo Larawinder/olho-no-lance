@@ -27,7 +27,7 @@ const MercadoPago = {
         try {
             console.log('🚀 Criando pagamento PIX via backend...');
             
-            const response = await fetch('http://localhost:3000/api/criar-pagamento', {
+const response = await fetch(`https://olho-no-lance-api.onrender.com/api/consultar-pagamento/${paymentId}`);               
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
