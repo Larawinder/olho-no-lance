@@ -14,6 +14,7 @@ const CONFIG = {
     // Quadras Disponíveis
     quadras: [
         'FM Sports',
+        'Arena ACS',
         'KF Sports',
         'Pedroso Sports',
         'KS Fut7',
